@@ -1,0 +1,51 @@
+digraph G {
+	rankdir=LR size="8,5"
+	node [shape=doublecircle]
+	node [shape=circle]
+	q0
+	q1
+	q2
+	q3
+	q4
+	q5
+	q6
+	q7
+	q8
+	q9
+	q10
+	q11
+	q12
+	q13
+	q14
+	q15
+	q16
+	q17
+	q18
+	q19
+	q0 -> q1 [label="&"]
+	q0 -> q15 [label="&"]
+	q1 -> q2 [label="&"]
+	q1 -> q6 [label="&"]
+	q2 -> q3 [label="&"]
+	q2 -> q13 [label="&"]
+	q3 -> q4 [label=a]
+	q4 -> q5 [label="&"]
+	q5 -> q2 [label="&"]
+	q5 -> q6 [label="&"]
+	q6 -> q7 [label=a]
+	q7 -> q8 [label=b]
+	q8 -> q9 [label="&"]
+	q9 -> q10 [label=b]
+	q10 -> q9 [label="&"]
+	q10 -> q11 [label="&"]
+	q11 -> q12 [label="&"]
+	q13 -> q14 [label=b]
+	q14 -> q5 [label="&"]
+	q15 -> q16 [label=t]
+	q16 -> q17 [label="&"]
+	q16 -> q19 [label="&"]
+	q17 -> q18 [label=c]
+	q18 -> q17 [label="&"]
+	q18 -> q19 [label="&"]
+	q19 -> q12 [label="&"]
+}

@@ -138,11 +138,17 @@ class State:
 # simbolo de epsilon = &
 # Algoritmo de Thompson para convertir una expresion regular a un NFA
 # Apoyo https://medium.com/swlh/visualizing-thompsons-construction-algorithm-for-nfas-step-by-step-f92ef378581b
+# Parametros:
+#   Regex - Expresion regular
+# Retorno:
+# Tupla si existe error(Diccionario) y el NFA
 def Thompson(Regex):
     NFAstack = []
     for char in Regex:
-
         if char == '|':
+            if(len(NFAstack) < 2):
+                print("No hay suficientes NFA para realizar la operacion | (or)\nDescripcion: Deben existir simbolos de ambos lados del operador | (or)\n Formato esperado a|b \n Formato recibido:")
+                return ({"Error": "No hay suficientes NFA para realizar la operacion |"}, None)
             nfa2 = NFAstack.pop()
             nfa1 = NFAstack.pop()
             start = State()
@@ -153,13 +159,16 @@ def Thompson(Regex):
             nfa2.end.addTransition('&', end)
             NFAstack.append(NFA(start, end))
 
-        elif char == '?':
+        elif char == '%':
             nfa2 = NFAstack.pop()
             nfa1 = NFAstack.pop()
             nfa1.end.transitions = {**nfa1.end.transitions,** nfa2.start.transitions}
             NFAstack.append(NFA(nfa1.start, nfa2.end))
 
         elif char == '*':
+            if len(NFAstack) < 1:
+                print("Error: No hay suficientes NFA para realizar la operacion * (cerradura de kleene)\n Formato esperado a* \n Formato recibido:")
+                return ({"Error": "No hay suficientes NFA para realizar la operacion *"}, None)
             nfa = NFAstack.pop()
             start = State()
             end = State()
@@ -170,6 +179,9 @@ def Thompson(Regex):
             NFAstack.append(NFA(start, end))
 
         elif char == '+':
+            if len(NFAstack) < 1:
+                print("Error: No hay suficientes NFA para realizar la operacion + (cerradura positiva)\n Formato esperado a+ \n Formato recibido:")
+                return ({"Error": "No hay suficientes NFA para realizar la operacion +"}, None)
             nfa = NFAstack.pop()
             start = State()
             end = State()
@@ -178,12 +190,39 @@ def Thompson(Regex):
             nfa.end.addTransition('&', end)
             NFAstack.append(NFA(start, end))
 
+        elif char == '?':
+            if len(NFAstack) < 1:
+                print("Error: No hay suficientes NFA para realizar la operacion ? (opcional)\n Formato esperado a? \n Formato recibido:")
+                return ({"Error": "No hay suficientes NFA para realizar la operacion ?"}, None)
+            start = State()
+            nfa = NFAstack.pop()
+            end = State()
+            subStart = State()
+            subEnd = State()
+
+
+
+            subStart.addTransition('&', subEnd)
+            subEnd.addTransition('&', end)
+
+            start.addTransition('&', subStart)
+            start.addTransition('&', nfa.start)
+            nfa.end.addTransition('&', end)
+
+            NFAstack.append(NFA(start, end))
+            
+
+
         else:
             end = State()
             start = State(transitions={char: [end]})
             NFAstack.append(NFA(start, end))
             
-    return NFAstack.pop()
+    return (False, NFAstack.pop())
+
+
+
+
 
 # Funcion para obtener todos los estados alcanzables desde un estado a través de epsilon
 def epsilonClosure(state):
@@ -242,9 +281,9 @@ def getStatesByName(states, names):
 
 # Algoritmo de subconjuntos para convertir un NFA a un DFA
 # VIDEOS DE APOYO
-# https://www.youtube.com/watch?v=WikU-ujoCqg
-# https://www.youtube.com/watch?v=vt2x0W_jcPU
-# https://www.youtube.com/watch?v=DjH7K7MZRAw&t=1427s
+# https://www.youtube.com/watch%v=WikU-ujoCqg
+# https://www.youtube.com/watch%v=vt2x0W_jcPU
+# https://www.youtube.com/watch%v=DjH7K7MZRAw&t=1427s
 
 def subsetConstruction(NFA,expression):
     DFA = {}
@@ -252,7 +291,7 @@ def subsetConstruction(NFA,expression):
     newStates = {}
     simbolos = []
     for c in expression:
-        if c not in simbolos and c not in ['|','?','*','+']:
+        if c not in simbolos and c not in ['|','%','*','+']:
             simbolos.append(c)
 
     DFA = {"Estados":[],}

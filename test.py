@@ -1,0 +1,3 @@
+char = '-'
+
+print(char.isalnum())
