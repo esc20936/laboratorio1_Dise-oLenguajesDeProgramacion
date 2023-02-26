@@ -6,9 +6,8 @@
 # - Pablo Escobar 20936
 
 from algorithms import Thompson, subsetConstruction
-import matplotlib.pyplot as plt
-import networkx as nx
 from utils import graphAutomata
+import pandas as pd
 
 
 # Funcion para parsear la expresion regular a notacion postfix
@@ -114,7 +113,7 @@ if __name__ == "__main__":
     ]
 
 
-    expresion = "(a|b)*abb+|tc*"
+    expresion = "(a|b)*a(a|b)(a|b)"
 
     # remove all whitespace
     # expresion = expresion.replace(" ", "")
@@ -145,15 +144,39 @@ if __name__ == "__main__":
         nfa.setNameToAllStates()
         print("Tabla de transiciones NFA\n")
         nfa.show()
-
+        print("\n")
         listaEstados = nfa.getAllStatesNamesInOrder()
         transiciones = nfa.getAllTransitions()
 
-        print(listaEstados)
-        print(transiciones)
+        # print(listaEstados)
+        # print(transiciones)
         # graphAutomat(edges,edgeLabels,nfa.getAcceptanceState(),'q0')
         graphAutomata(listaEstados, transiciones)
+        subset = subsetConstruction(nfa, expresion)
 
+        estadosSubset = []
+        transicionesSubset = {}
+        for i in range(len(subset['Estados'])):
+            ESTADO = subset['Estados'][i]
+            estadosSubset.append(subset['Estados'][i])
+            for transicion in subset.keys():
+                if transicion != 'Estados':
+                    diccionarioSimbolo = {}
+                    if subset[transicion][i] != 'NONE':
+                        diccionarioSimbolo[transicion] = [subset[transicion][i]]
+                        
+                        if ESTADO in transicionesSubset:
+                            transicionesSubset[ESTADO].update(diccionarioSimbolo)
+                        else:
+                            transicionesSubset[ESTADO] = diccionarioSimbolo
+            # estadosSubset.append(subset['Estados'][i])
+
+        print(transicionesSubset)
+        print(estadosSubset)
+        graphAutomata(estadosSubset, transicionesSubset,"subsetConstruction.gv")
+        print("Tabla de transiciones Subset Construction\n")
+        df = pd.DataFrame(subset)
+        print(df)
         print("\n")
 
     else:

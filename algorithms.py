@@ -200,8 +200,6 @@ def Thompson(Regex):
             subStart = State()
             subEnd = State()
 
-
-
             subStart.addTransition('&', subEnd)
             subEnd.addTransition('&', end)
 
@@ -291,7 +289,7 @@ def subsetConstruction(NFA,expression):
     newStates = {}
     simbolos = []
     for c in expression:
-        if c not in simbolos and c not in ['|','%','*','+']:
+        if c not in simbolos and c not in ['|','%','*','+', '?']:
             simbolos.append(c)
 
     DFA = {"Estados":[],}

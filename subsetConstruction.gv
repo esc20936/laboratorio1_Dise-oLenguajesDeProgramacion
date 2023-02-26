@@ -1,0 +1,39 @@
+digraph G {
+	rankdir=LR size="20,5"
+	node [shape=doublecircle]
+	S0
+	node [shape=circle]
+	S1
+	node [shape=circle]
+	S2
+	node [shape=circle]
+	S3
+	node [shape=circle]
+	S4
+	node [shape=circle]
+	S5
+	node [shape=circle]
+	S6
+	node [shape=circle]
+	S7
+	node [shape=circle]
+	S8
+	S0 -> S1 [label=a]
+	S0 -> S2 [label=b]
+	S1 -> S3 [label=a]
+	S1 -> S4 [label=b]
+	S2 -> S1 [label=a]
+	S2 -> S2 [label=b]
+	S3 -> S5 [label=a]
+	S3 -> S6 [label=b]
+	S4 -> S7 [label=a]
+	S4 -> S8 [label=b]
+	S5 -> S5 [label=a]
+	S5 -> S6 [label=b]
+	S6 -> S7 [label=a]
+	S6 -> S8 [label=b]
+	S7 -> S3 [label=a]
+	S7 -> S4 [label=b]
+	S8 -> S1 [label=a]
+	S8 -> S2 [label=b]
+}
