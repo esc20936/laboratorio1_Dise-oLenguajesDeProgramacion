@@ -5,7 +5,7 @@ from graphviz import Digraph
 def graphAutomata(states, transitions, name="automata.gv"):
     g = Digraph('G', filename=name, format='png')
     g.attr(rankdir='LR', size='20,5')
-    print(transitions)
+    # print(transitions)
     cont = 0
     for state in states:
         if cont == 0:
