@@ -275,12 +275,21 @@ def getStatesByName(states, names):
             statesByName.add(state)
     return statesByName
 
+# Function that is going to take a dictionary where the keys are the states and the values are the subStates, also receives a subState
+# and returns an array with the states that contain the subState
+def getStatesBySubState(states, subState):
+    statesBySubState = []
+    for state in states:
+        if subState in states[state]:
+            statesBySubState.append(state)
+    return statesBySubState
+
 
 # Algoritmo de subconjuntos para convertir un NFA a un DFA
 # VIDEOS DE APOYO
-# https://www.youtube.com/watch%v=WikU-ujoCqg
-# https://www.youtube.com/watch%v=vt2x0W_jcPU
-# https://www.youtube.com/watch%v=DjH7K7MZRAw&t=1427s
+# https://www.youtube.com/watch?v=WikU-ujoCqg
+# https://www.youtube.com/watch?v=vt2x0W_jcPU
+# https://www.youtube.com/watch?v=DjH7K7MZRAw&t=1427s
 
 def subsetConstruction(NFA,expression):
     DFA = {}
@@ -331,5 +340,5 @@ def subsetConstruction(NFA,expression):
                                 DFA[s].append(key)
                 else:
                     DFA[s].append("NONE")
-    print(newStates)
-    return DFA
+    # print(newStates)
+    return (DFA, newStates)

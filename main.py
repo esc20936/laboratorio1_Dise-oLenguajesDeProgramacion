@@ -5,7 +5,7 @@
 #  Autor:
 # - Pablo Escobar 20936
 
-from algorithms import Thompson, subsetConstruction
+from algorithms import Thompson, subsetConstruction, getStatesBySubState
 from utils import graphAutomata
 import pandas as pd
 
@@ -101,6 +101,39 @@ def createFixedRegex(regex):
     return newRegex
 
 
+
+
+def getDFASubset(nfa, expresion, acceptanceStates):
+    subset,newStates = subsetConstruction(nfa, expresion)
+    subState = acceptanceStates.split("q")[1]
+    
+    acceptanceStatesArray = getStatesBySubState(newStates,str(subState))
+    estadosSubset = []
+    transicionesSubset = {}
+    for i in range(len(subset['Estados'])):
+        ESTADO = subset['Estados'][i]
+        estadosSubset.append(subset['Estados'][i])
+        for transicion in subset.keys():
+            if transicion != 'Estados':
+                diccionarioSimbolo = {}
+                if subset[transicion][i] != 'NONE':
+                    diccionarioSimbolo[transicion] = [subset[transicion][i]]
+                    
+                    if ESTADO in transicionesSubset:
+                        transicionesSubset[ESTADO].update(diccionarioSimbolo)
+                    else:
+                        transicionesSubset[ESTADO] = diccionarioSimbolo
+        estadosSubset.append(subset['Estados'][i])
+    
+    print(newStates)
+    graphAutomata(estadosSubset, transicionesSubset,"subsetConstruction.gv", acceptanceStatesArray)
+    print("Tabla de transiciones Subset Construction\n")
+    df = pd.DataFrame(subset)
+    print(df)
+    print("\n")
+
+
+
 def start(expresion):
     if validarExpresionRegular(expresion):
         regex = expresion
@@ -122,36 +155,9 @@ def start(expresion):
         print("\n")
         listaEstados = nfa.getAllStatesNamesInOrder()
         transiciones = nfa.getAllTransitions()
-        graphAutomata(listaEstados, transiciones)
-
-        
-        # subset = subsetConstruction(nfa, expresion)
-
-        # estadosSubset = []
-        # transicionesSubset = {}
-        # for i in range(len(subset['Estados'])):
-        #     ESTADO = subset['Estados'][i]
-        #     estadosSubset.append(subset['Estados'][i])
-        #     for transicion in subset.keys():
-        #         if transicion != 'Estados':
-        #             diccionarioSimbolo = {}
-        #             if subset[transicion][i] != 'NONE':
-        #                 diccionarioSimbolo[transicion] = [subset[transicion][i]]
-                        
-        #                 if ESTADO in transicionesSubset:
-        #                     transicionesSubset[ESTADO].update(diccionarioSimbolo)
-        #                 else:
-        #                     transicionesSubset[ESTADO] = diccionarioSimbolo
-        #     # estadosSubset.append(subset['Estados'][i])
-
-        # print(transicionesSubset)
-        # print(estadosSubset)
-        # graphAutomata(estadosSubset, transicionesSubset,"subsetConstruction.gv")
-        # print("Tabla de transiciones Subset Construction\n")
-        # df = pd.DataFrame(subset)
-        # print(df)
-        # print("\n")
-
+        aceptanceState = nfa.getAcceptanceState()
+        graphAutomata(listaEstados, transiciones,"nfa.gv")  
+        getDFASubset(nfa, expresion,aceptanceState)
     else:
         print("Expresion regular no valida")
 
@@ -169,7 +175,7 @@ if __name__ == "__main__":
         "(a|b))",
     ]
 
-    expresion = expresiones[0]
+    expresion = "(a|b)*abb(a|b)*"
 
     start(expresion)
 
