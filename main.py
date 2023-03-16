@@ -101,32 +101,7 @@ def createFixedRegex(regex):
     return newRegex
 
 
-if __name__ == "__main__":
-
-    expresiones = [
-        "*a",
-        "a||",
-        "|ba",
-        "ab|&|",
-        "(a|b",
-        "(a|b))",
-    ]
-
-
-    expresion = "(a|b)*a(a|b)(a|b)"
-
-    # remove all whitespace
-    # expresion = expresion.replace(" ", "")
-
-    OPERATORS = {
-        '|': 1,
-        '^': 2,
-        '*': 3,
-        '%': 2,
-        '+': 3
-    }
-    EPSILON = '&'
-
+def start(expresion):
     if validarExpresionRegular(expresion):
         regex = expresion
         expresion = createFixedRegex(expresion)
@@ -147,37 +122,58 @@ if __name__ == "__main__":
         print("\n")
         listaEstados = nfa.getAllStatesNamesInOrder()
         transiciones = nfa.getAllTransitions()
-
-        # print(listaEstados)
-        # print(transiciones)
-        # graphAutomat(edges,edgeLabels,nfa.getAcceptanceState(),'q0')
         graphAutomata(listaEstados, transiciones)
-        subset = subsetConstruction(nfa, expresion)
 
-        estadosSubset = []
-        transicionesSubset = {}
-        for i in range(len(subset['Estados'])):
-            ESTADO = subset['Estados'][i]
-            estadosSubset.append(subset['Estados'][i])
-            for transicion in subset.keys():
-                if transicion != 'Estados':
-                    diccionarioSimbolo = {}
-                    if subset[transicion][i] != 'NONE':
-                        diccionarioSimbolo[transicion] = [subset[transicion][i]]
+        
+        # subset = subsetConstruction(nfa, expresion)
+
+        # estadosSubset = []
+        # transicionesSubset = {}
+        # for i in range(len(subset['Estados'])):
+        #     ESTADO = subset['Estados'][i]
+        #     estadosSubset.append(subset['Estados'][i])
+        #     for transicion in subset.keys():
+        #         if transicion != 'Estados':
+        #             diccionarioSimbolo = {}
+        #             if subset[transicion][i] != 'NONE':
+        #                 diccionarioSimbolo[transicion] = [subset[transicion][i]]
                         
-                        if ESTADO in transicionesSubset:
-                            transicionesSubset[ESTADO].update(diccionarioSimbolo)
-                        else:
-                            transicionesSubset[ESTADO] = diccionarioSimbolo
-            # estadosSubset.append(subset['Estados'][i])
+        #                 if ESTADO in transicionesSubset:
+        #                     transicionesSubset[ESTADO].update(diccionarioSimbolo)
+        #                 else:
+        #                     transicionesSubset[ESTADO] = diccionarioSimbolo
+        #     # estadosSubset.append(subset['Estados'][i])
 
-        print(transicionesSubset)
-        print(estadosSubset)
-        graphAutomata(estadosSubset, transicionesSubset,"subsetConstruction.gv")
-        print("Tabla de transiciones Subset Construction\n")
-        df = pd.DataFrame(subset)
-        print(df)
-        print("\n")
+        # print(transicionesSubset)
+        # print(estadosSubset)
+        # graphAutomata(estadosSubset, transicionesSubset,"subsetConstruction.gv")
+        # print("Tabla de transiciones Subset Construction\n")
+        # df = pd.DataFrame(subset)
+        # print(df)
+        # print("\n")
 
     else:
         print("Expresion regular no valida")
+
+
+
+
+if __name__ == "__main__":
+
+    expresiones = [
+        "*a",
+        "a||",
+        "|ba",
+        "ab|&|",
+        "(a|b",
+        "(a|b))",
+    ]
+
+    expresion = expresiones[0]
+
+    start(expresion)
+
+    
+
+
+   
