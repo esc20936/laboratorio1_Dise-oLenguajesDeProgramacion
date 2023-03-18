@@ -17,8 +17,6 @@ def graphAutomata(states, transitions, name="automata.gv", acceptStates=[]):
             g.attr('node', shape='doublecircle')
         g.node(state)
     
-
-
     for state, transitions in transitions.items():
         for symbol, states in transitions.items():
             for state2 in states:
