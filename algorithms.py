@@ -17,7 +17,6 @@ def belongsToLanguage(nfa, string, acceptanceStates):
         currentStates = epsilonClosureOfSet(nextStates)
     # Verificar si el conjunto de estados actuales contiene un estado final
     for state in currentStates:
-        print(state.name)
         if state.name in acceptanceStates:
             return True
     return False

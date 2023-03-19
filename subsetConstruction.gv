@@ -17,16 +17,12 @@ digraph G {
 	node [color=black shape=circle]
 	S3
 	node [color=black shape=circle]
-	node [shape=doublecircle]
 	S4
 	node [color=black shape=circle]
-	node [shape=doublecircle]
 	S4
 	node [color=black shape=circle]
-	node [shape=doublecircle]
 	S5
 	node [color=black shape=circle]
-	node [shape=doublecircle]
 	S5
 	node [color=black shape=circle]
 	node [shape=doublecircle]
@@ -34,34 +30,21 @@ digraph G {
 	node [color=black shape=circle]
 	node [shape=doublecircle]
 	S6
-	node [color=black shape=circle]
-	node [shape=doublecircle]
-	S7
-	node [color=black shape=circle]
-	node [shape=doublecircle]
-	S7
-	node [color=black shape=circle]
-	node [shape=doublecircle]
-	S8
-	node [color=black shape=circle]
-	node [shape=doublecircle]
-	S8
 	S0 -> S1 [label=a]
-	S0 -> S2 [label=b]
+	S0 -> S2 [label=x]
+	S0 -> S3 [label=b]
+	S0 -> S4 [label=z]
 	S1 -> S1 [label=a]
+	S1 -> S2 [label=x]
 	S1 -> S3 [label=b]
+	S1 -> S4 [label=z]
 	S2 -> S1 [label=a]
-	S2 -> S2 [label=b]
-	S3 -> S1 [label=a]
-	S3 -> S4 [label=b]
+	S2 -> S2 [label=x]
+	S2 -> S3 [label=b]
+	S2 -> S4 [label=z]
+	S3 -> S3 [label=b]
+	S3 -> S4 [label=z]
 	S4 -> S5 [label=a]
-	S4 -> S6 [label=b]
-	S5 -> S5 [label=a]
-	S5 -> S7 [label=b]
-	S6 -> S5 [label=a]
-	S6 -> S6 [label=b]
-	S7 -> S5 [label=a]
-	S7 -> S8 [label=b]
-	S8 -> S5 [label=a]
-	S8 -> S6 [label=b]
+	S4 -> S4 [label=z]
+	S5 -> S6 [label=x]
 }

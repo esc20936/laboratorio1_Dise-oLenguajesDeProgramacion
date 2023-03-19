@@ -57,10 +57,10 @@ def getDFASubset(nfa, expresion, acceptanceStates):
     print("\n")
 
     # minimizacion
-    print("Tabla de transiciones Minimizacion\n")
-    print("Estados de aceptacion: ", acceptanceStatesArray)
-    # df.set_index('Estados', inplace=True)
-    print(df)
+    # print("Tabla de transiciones Minimizacion\n")
+    # print("Estados de aceptacion: ", acceptanceStatesArray)
+    # # df.set_index('Estados', inplace=True)
+    # print(df)
     # minimizacion = minimize_dfa(df, acceptanceStatesArray)
     # print(minimizacion)
 
@@ -86,8 +86,14 @@ def startThompsonSubsetMin(expresion, cadena):
         listaEstados = nfa.getAllStatesNamesInOrder()
         transiciones = nfa.getAllTransitions()
         aceptanceState = nfa.getAcceptanceState()
+        print("\nSimulacion de cadena en NFA\n")
         res = belongsToLanguage(nfa, cadena, [aceptanceState])
-        print(res)
+        print("Cadena: ", cadena)
+        print("Resultado: ", res)
+        if res:
+            print("La cadena pertenece al lenguaje")
+        else:
+            print("La cadena no pertenece al lenguaje")
         graphAutomata(listaEstados, transiciones, "nfa.gv")
         getDFASubset(nfa, expresion, aceptanceState)
     else:
@@ -95,8 +101,9 @@ def startThompsonSubsetMin(expresion, cadena):
 
 
 if __name__ == "__main__":
-    expresion = "(a|b)*abb(a|b)*"
-    cadena = "abbab"
+
+    expresion = "(a|x)*b*z+ax"
+    cadena = "abzzax"
 
     operators = {
         "*": 3,

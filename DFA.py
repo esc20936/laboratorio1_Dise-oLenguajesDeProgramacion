@@ -335,7 +335,7 @@ class DFA(FA):
             (end - start) * 1000,
             terminal
             if terminal is None
-            else f"Ejecutado con exito, {string} E l(r)"
+            else f"Ejecutado con exito"
             if terminal
             else "No es posible ejecutar",
         )
