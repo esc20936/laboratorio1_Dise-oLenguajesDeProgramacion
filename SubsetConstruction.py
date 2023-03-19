@@ -1,4 +1,3 @@
-
 # Funcion para guardar como estado de aceptacion basado en los nuevos estadaos
 # Parametros:
 # - states: estados
@@ -9,6 +8,7 @@ def getStatesBySubState(states, subState):
         if subState in states[state]:
             statesBySubState.append(state)
     return statesBySubState
+
 
 # Funcion para obtener todos los estados por nombre
 # Parametros:
@@ -24,8 +24,9 @@ def getStatesByName(states, names):
             statesByName.add(state)
     return statesByName
 
+
 # Funcion para obtener todos los estados alcanzables desde un conjunto de estados a través de un simbolo
-def getTransions(states,symbol):
+def getTransions(states, symbol):
     transiciones = set()
     for state in states:
         if symbol in state.transitions:
@@ -40,10 +41,11 @@ def epsilonClosure(state):
         return set()
     closure = set()
     closure.add(state)
-    if '&' in state.transitions:
-        for state in state.transitions['&']:
+    if "&" in state.transitions:
+        for state in state.transitions["&"]:
             closure = closure.union(epsilonClosure(state))
     return closure
+
 
 # Funcion para obtener todos los estados alcanzables desde un conjunto de estados a través de epsilon
 def epsilonClosureOfSet(states):
@@ -52,9 +54,10 @@ def epsilonClosureOfSet(states):
         closure = closure.union(epsilonClosure(state))
     return closure
 
+
 # Funcion para obtener los nombres de los estados en string
 def getFixedName(states):
-    newName =""
+    newName = ""
     numbers = []
     for state in states:
         numbers.append(int(state.name[1:]))
@@ -65,25 +68,29 @@ def getFixedName(states):
 
     return newName[:-1]
 
+
 # Algoritmo de subconjuntos para convertir un NFA a un DFA
 # VIDEOS DE APOYO
 # https://www.youtube.com/watch?v=WikU-ujoCqg
 # https://www.youtube.com/watch?v=vt2x0W_jcPU
 # https://www.youtube.com/watch?v=DjH7K7MZRAw&t=1427s
 
-def subsetConstruction(NFA,expression):
+
+def subsetConstruction(NFA, expression):
     DFA = {}
     start = NFA.start
     newStates = {}
     simbolos = []
     for c in expression:
-        if c not in simbolos and c not in ['|','%','*','+', '?']:
+        if c not in simbolos and c not in ["|", "%", "*", "+", "?"]:
             simbolos.append(c)
 
-    DFA = {"Estados":[],}
+    DFA = {
+        "Estados": [],
+    }
     for s in simbolos:
-        if s != '&':
-            DFA[s]=[]
+        if s != "&":
+            DFA[s] = []
 
     # epsilon closure del estado inicial
     data = epsilonClosure(start)
@@ -91,28 +98,28 @@ def subsetConstruction(NFA,expression):
     valor = f"S{len(newStates)}"
     newStates[valor] = getFixedName(data)
 
-    DFA['Estados']= [valor]
-    for STATE in enumerate(DFA['Estados']):
-        ndata = getStatesByName(NFA.getAllStates(),newStates[STATE[1]].split(','))
+    DFA["Estados"] = [valor]
+    for STATE in enumerate(DFA["Estados"]):
+        ndata = getStatesByName(NFA.getAllStates(), newStates[STATE[1]].split(","))
         newSet = set()
         for state in ndata:
             newSet = newSet.union(epsilonClosure(state))
         data = ndata
         for s in simbolos:
-            if s != '&':
-                transiciones = getTransions(data,s)
-                nData =set()
+            if s != "&":
+                transiciones = getTransions(data, s)
+                nData = set()
                 for state in transiciones:
-                    nData = nData.union(epsilonClosure(state))  
+                    nData = nData.union(epsilonClosure(state))
                 # print("nData",nData)
                 nName = getFixedName(nData)
                 # print(nName)
                 if nName != "":
                     if nName not in newStates.values():
                         valor = f"S{len(newStates)}"
-                    
+
                         newStates[valor] = nName
-                        DFA['Estados'].append(valor)
+                        DFA["Estados"].append(valor)
                         DFA[s].append(valor)
                     else:
                         for key in newStates:

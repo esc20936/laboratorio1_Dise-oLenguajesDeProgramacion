@@ -7,38 +7,50 @@
 
 # from algorithms import Thompson, subsetConstruction, getStatesBySubState
 from Thompson import Thompson
-from SubsetConstruction import subsetConstruction, getStatesBySubState
+from SubsetConstruction import subsetConstruction, getStatesBySubState, getStatesByName
 from utils import graphAutomata
-from algorithms import parseRegexToPostfix, revisarParentesis, validarExpresionRegular, createFixedRegex
+from algorithms import (
+    belongsToLanguage,
+    parseRegexToPostfix,
+    revisarParentesis,
+    validarExpresionRegular,
+    createFixedRegex,
+)
 from minimization import minimize_dfa
 from SyntaxTree import SyntaxTree
 from DFA import DFA
 import pandas as pd
 
+
 def getDFASubset(nfa, expresion, acceptanceStates):
-    subset,newStates = subsetConstruction(nfa, expresion)
+    subset, newStates = subsetConstruction(nfa, expresion)
     subState = acceptanceStates.split("q")[1]
-    
-    acceptanceStatesArray = getStatesBySubState(newStates,str(subState))
+
+    acceptanceStatesArray = getStatesBySubState(newStates, str(subState))
     estadosSubset = []
     transicionesSubset = {}
-    for i in range(len(subset['Estados'])):
-        ESTADO = subset['Estados'][i]
-        estadosSubset.append(subset['Estados'][i])
+    for i in range(len(subset["Estados"])):
+        ESTADO = subset["Estados"][i]
+        estadosSubset.append(subset["Estados"][i])
         for transicion in subset.keys():
-            if transicion != 'Estados':
+            if transicion != "Estados":
                 diccionarioSimbolo = {}
-                if subset[transicion][i] != 'NONE':
+                if subset[transicion][i] != "NONE":
                     diccionarioSimbolo[transicion] = [subset[transicion][i]]
-                    
+
                     if ESTADO in transicionesSubset:
                         transicionesSubset[ESTADO].update(diccionarioSimbolo)
                     else:
                         transicionesSubset[ESTADO] = diccionarioSimbolo
-        estadosSubset.append(subset['Estados'][i])
-    
+        estadosSubset.append(subset["Estados"][i])
+
     print(newStates)
-    graphAutomata(estadosSubset, transicionesSubset,"subsetConstruction.gv", acceptanceStatesArray)
+    graphAutomata(
+        estadosSubset,
+        transicionesSubset,
+        "subsetConstruction.gv",
+        acceptanceStatesArray,
+    )
     print("Tabla de transiciones Subset Construction\n")
     df = pd.DataFrame(subset)
     print(df)
@@ -49,13 +61,11 @@ def getDFASubset(nfa, expresion, acceptanceStates):
     print("Estados de aceptacion: ", acceptanceStatesArray)
     # df.set_index('Estados', inplace=True)
     print(df)
-    minimizacion = minimize_dfa(df, acceptanceStatesArray)
-    print(minimizacion)
+    # minimizacion = minimize_dfa(df, acceptanceStatesArray)
+    # print(minimizacion)
 
 
-
-# hopcroft
-def startThompsonSubsetMin(expresion):
+def startThompsonSubsetMin(expresion, cadena):
     if validarExpresionRegular(expresion):
         regex = expresion
         expresion = createFixedRegex(expresion)
@@ -66,9 +76,8 @@ def startThompsonSubsetMin(expresion):
         if nfa[1] == None:
             print(regex)
             exit()
-        
-        nfa = nfa[1]
 
+        nfa = nfa[1]
 
         nfa.setNameToAllStates()
         print("Tabla de transiciones NFA\n")
@@ -77,29 +86,28 @@ def startThompsonSubsetMin(expresion):
         listaEstados = nfa.getAllStatesNamesInOrder()
         transiciones = nfa.getAllTransitions()
         aceptanceState = nfa.getAcceptanceState()
-        graphAutomata(listaEstados, transiciones,"nfa.gv")  
-        getDFASubset(nfa, expresion,aceptanceState)
+        res = belongsToLanguage(nfa, cadena, [aceptanceState])
+        print(res)
+        graphAutomata(listaEstados, transiciones, "nfa.gv")
+        getDFASubset(nfa, expresion, aceptanceState)
     else:
         print("Expresion regular no valida")
 
 
-
-
 if __name__ == "__main__":
-
     expresion = "(a|b)*abb(a|b)*"
-    cadena = "aaaaaaaabba"
+    cadena = "abbab"
 
     operators = {
-        '*': 3,
-        '%': 2,
-        '|': 1,
-        '+': 3,
-        '.': 2,
-        '?': 3,
+        "*": 3,
+        "%": 2,
+        "|": 1,
+        "+": 3,
+        ".": 2,
+        "?": 3,
     }
 
-    # startThompsonSubsetMin(expresion)
+    startThompsonSubsetMin(expresion, cadena)
     arbol = SyntaxTree(operators, expresion)
 
     hash_tree = SyntaxTree(operators, expresion + "#", direct=True)
@@ -111,7 +119,3 @@ if __name__ == "__main__":
     direct_dfa.graph_automata(mapping=direct_dfa.state_mapping)
     res = direct_dfa.simulate(cadena)
     print(res)
-    
-
-
-   

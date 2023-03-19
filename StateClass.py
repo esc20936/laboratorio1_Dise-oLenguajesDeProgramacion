@@ -23,13 +23,13 @@ class State:
     def setName(self, name):
         self.name = name
 
-    # Clase que nos ayudara a mostrar el NFA 
+    # Clase que nos ayudara a mostrar el NFA
     def show(self, visited=None):
         if visited is None:
             visited = set()
         if self in visited:
             return
-        visited.add(self)   
+        visited.add(self)
         statesNames = []
         clave = ""
         for key in self.transitions:
@@ -64,8 +64,28 @@ class State:
             for state in self.transitions[key]:
                 state.getAllStates(visited)
         return visited
-    
-    
+
+    # Funcion para obtener todos los estados, incluyendo
+    def getAllStates(self, visited=None):
+        if visited is None:
+            visited = set()
+        if self in visited:
+            return
+        visited.add(self)
+
+        # Follow epsilon transitions
+        epsilon_states = self.getTransition("&")
+        if epsilon_states:
+            for state in epsilon_states:
+                state.getAllStates(visited)
+
+        # Follow transitions for all symbols
+        for symbol in self.transitions:
+            for state in self.transitions[symbol]:
+                state.getAllStates(visited)
+
+        return visited
+
     def getAllTransitionsWithNames(self):
         transitions = {}
         for key in self.transitions:
@@ -93,4 +113,3 @@ class State:
             for state in self.transitions[key]:
                 state.getAllSymbols(visited)
         return visited
-  
