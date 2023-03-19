@@ -101,9 +101,15 @@ def startThompsonSubsetMin(expresion, cadena):
 
 
 if __name__ == "__main__":
+    pruebas=[
+        "(a*|b*)c",
+        "(a|b)*abb",
+        "ab*ab*",
+        "(x|y)*052c+",
+    ]
 
-    expresion = "(a|x)*b*z+ax"
-    cadena = "abzzax"
+    expresion = pruebas[3]
+    cadena = "xxyy052ccc1d23asd5"
 
     operators = {
         "*": 3,
